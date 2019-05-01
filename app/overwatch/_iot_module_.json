@@ -1,0 +1,13 @@
+{
+  "title": "Overwatch",
+  "author": "Steven Woodhall",
+  "desc": "Alerts you about vulnerable IoT Devices.",
+  "repo": "https://github.com/z7ev3n/iotd",
+  "manage_url": "/overwatch",
+  "icon": "https://raw.githubusercontent.com/z7ev3n/iotd/master/app/overwatch/logo.png",
+  "enabled": true,
+  "reqirements": {
+    "packages": ["nmap"],
+    "pip": ["requests", "shodan"]
+  }
+}

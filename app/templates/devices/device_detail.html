@@ -1,0 +1,40 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" title="Information stored about this device." data-toggle="tooltip" data-placement="left">
+        <a href="{% url 'delete-device'%}?id={{device.pk}}"><button class="btn btn-danger float-right" title="Permanently delete this device."><i class="fa fa-trash"></i> Delete Device</button></a>
+        <h1>Device Info</h1>
+        <form action="#" method="post">
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="form-group row">
+            <label class="col-3 col-form-label">{{ field.help_text }}</label>
+            <div class="col-9">{{ field }}</div>
+          </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if dns_queries %}
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" title="Recent DNS queries made by this device." data-toggle="tooltip" data-placement="top">
+        <a href="/clear-dns?ip={{device.ipv4}}"><button class="btn btn-warning float-right" title="Clear DNS history for this device."><i class="fa fa-trash"></i> Clear History</button></a>
+        <h1 class="">DNS Queries</h1>
+        {% load django_tables2 %}
+        {% render_table dns_queries %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% endblock %}

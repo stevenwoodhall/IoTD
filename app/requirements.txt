@@ -1,0 +1,9 @@
+django-chartjs
+django-extensions
+django-qr-code
+django-tables2
+djangorestframework
+gunicorn
+pyprowl
+python-dotenv
+validators

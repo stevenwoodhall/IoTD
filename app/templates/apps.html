@@ -1,0 +1,43 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="">Apps</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-3 text-center">
+  <div class="container">
+    <div class="row justify-content-center" title="List of avaliable apps." data-toggle="tooltip" data-placement="top">
+      {% if apps %}
+      {% for key, app in apps.items %}
+      <div class="col-lg-3 col-6 p-4" style="">
+        <a href="{{ app.manage_url }}"><img class="rounded" style="max-width:115px;" src="{{ app.icon }}"></a>
+        <p class="lead">{{ app.title }}</p>
+        <p>{{ app.desc }}</p>
+        <small alt="IP Address"><strong>Author: </strong><a target="_blank" href="{{ app.repo }}">{{ app.author }}</a></small>
+        <br><br>
+        {% if app.enabled %}
+        <a class="btn btn-danger" href="?toggle-app={{ app.title }}">Disable</a>
+        <a class="btn btn-primary" href="{{ app.manage_url }}">Manage</a>
+        {% else %}
+        <a class="btn btn-success" href="?toggle-app={{ app.title }}">Enable</a>
+        {% endif %}
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="col-lg-3 col-6 p-4" style="">
+        <p>No apps installed.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

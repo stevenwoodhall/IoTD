@@ -1,0 +1,100 @@
+{% extends "base_generic.html" %}
+
+{% load humanize %}
+{% load django_tables2 %}
+
+{% block content %}
+
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      {% if banner %}
+      <div class="col-md-12">
+        <div class="alert alert-{{ banner.type }}" role="alert">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <h4 class="alert-heading">{{ banner.title }}</h4>
+          <p class="mb-0">{{ banner.msg }}</p>
+        </div>
+      </div>
+      {% endif %}
+      <div class="col-md-12">
+        <h1 class="">Overwatch: Summary</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p class="text-left">This module alerts you about vulnerable IoT devices.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" title="Information from Shodan." data-toggle="tooltip" data-placement="top">
+        <h3 class="">Shodan</h3>
+        <div class="jumbotron">
+          {% if settings.shodan_api_key %}
+            {% if shodan.error %}
+              <h5 class="text-center">{{ shodan.error }}</h5>
+            {% else %}
+              <div class="row">
+                <div class="col-md-6">
+                  <h3>Your public IP address is <strong>{{ shodan.ip_str }}</strong>!</h3>
+                  <p><strong>ISP:</strong> {{ shodan.isp }}</p>
+                  {% if shodan.data %}
+                  <p><strong>Open Ports:</strong>{% for data in shodan.data %} {{ data.port }}({{ data.transport|upper }}){% endfor %}</p>
+                  {% else %}
+                  <p><strong>Open Ports:</strong> None!</p>
+                  {% endif %}
+                  <p><small>Info Last Updated: {{ shodan.last_update | naturaltime }}</small></p>
+                  <p><a class="btn btn-danger btn-md" href="https://shodan.io/host/{{ shodan.ip_str }}" role="button" target="_blank">View on Shodan</a></p>
+                </div>
+                <div class="col-md-6">
+                  {% if shodan_history %}
+                    <h3>Shodan History</h3>
+                    <table class="table">
+                      <thead class="thead-default">
+                        <tr>
+                          <th scope="col">Date</th>
+                          <th scope="col">IP</th>
+                          <th scope="col">Open Ports</th>
+                        </tr>
+                      </thead>
+                      {% if shodan_history %}
+                        <tbody>
+                          {% for history in shodan_history %}
+                            <tr>
+                              <td>{{ history.last_update }}</td>
+                              <td>{{ history.ip_str }}</td>
+                              <th scope="row">{{ history.ports }}</th>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      {% endif %}
+                    </table>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          {% else %}
+          <h5 class="text-center">Please add your <a href="https://developer.shodan.io/api" target="_blank">Shodan API Key</a> in <a href="/settings">Settings</a> to enable this feature.</h5>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="py-0">
+    <div class="container">
+      <div class="row">
+        {% if alerts %}
+        <div class="col-md-12" title="Recent alerts triggered by Overwatch." data-toggle="tooltip" data-placement="top">
+          <h3 class="">Recent Alerts</h3>
+          {% render_table alerts %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endblock %}

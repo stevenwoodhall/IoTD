@@ -1,0 +1,82 @@
+{% extends "base_generic.html" %}
+{% load static %}
+{% block content %}
+
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="float-right"><a href="/admin">Manage Database (Advanced)</a></p>
+        <h1 class="">Settings</h1>
+        <p>You are currently logged in as <code>{{ user.get_username }}</code>, if you wish to change your password click <a href="/admin/password_change/">here<a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="py-3">
+  <div class="container">
+    <form action="#" method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      {% if field.help_text == 'The password that devices use to connect to IoTD.' %}
+      <div class="form-group row">
+        <label class="col-3 col-form-label">{{ field.help_text }}</label>
+        <div class="col-9">
+          {{ field }}
+          <p id="pwd-message"></p>
+        </div>
+      </div>
+      {% else %}
+      <div class="form-group row">
+        <label class="col-3 col-form-label">{{ field.help_text }}</label>
+        <div class="col-9">{{ field }}</div>
+      </div>
+      {% endif %}
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+{% block extra %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js" integrity="sha256-Znf8FdJF85f1LV0JmPOob5qudSrns8pLPZ6qkd/+F0o=" crossorigin="anonymous"></script>
+<script>
+  $('#id_wifi_password').on('input', function() {
+    pwdTest = zxcvbn($("#id_wifi_password").val());
+    if (pwdTest.feedback.warning) {
+      $("#pwd-message").text("Warning: " + pwdTest.feedback.warning + ".");
+    } else {
+      $("#pwd-message").text("");
+    }
+    if (pwdTest.score == 0) {
+      $("#id_wifi_password").css({
+        'background-color': 'red',
+        'color': 'white'
+      })
+    } else if (pwdTest.score == 2) {
+      $("#id_wifi_password").css({
+        'background-color': 'yellow',
+        'color': 'black'
+      })
+    } else if (pwdTest.score == 3) {
+      $("#id_wifi_password").css({
+        'background-color': 'orange',
+        'color': 'white'
+      })
+    } else if (pwdTest.score > 3) {
+      $("#id_wifi_password").css({
+        'background-color': 'green',
+        'color': 'white'
+      })
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,20 @@
+[Unit]
+Description = IoTDWeb
+After = network.target
+
+[Service]
+PermissionsStartOnly = true
+PIDFile = /run/iotd-django/iotd.pid
+User = pi
+Group = pi
+WorkingDirectory = /opt/iotd/app
+ExecStartPre = /bin/mkdir /run/iotd-django
+ExecStartPre = /bin/chown -R pi:pi /run/iotd-django
+ExecStart = /usr/bin/env gunicorn app.wsgi -b 127.0.0.1:8000 --pid /run/iotd-django/iotd.pid
+ExecReload = /bin/kill -s HUP $MAINPID
+ExecStop = /bin/kill -s TERM $MAINPID
+ExecStopPost = /bin/rm -rf /run/iotd-django
+PrivateTmp = true
+
+[Install]
+WantedBy = multi-user.target

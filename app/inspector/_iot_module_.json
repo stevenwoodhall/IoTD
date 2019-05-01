@@ -1,0 +1,13 @@
+{
+  "title": "Packet Inspector",
+  "author": "Steven Woodhall",
+  "desc": "Record and analyse device traffic.",
+  "repo": "https://github.com/z7ev3n/IoTD",
+  "manage_url": "/inspector",
+  "icon": "https://raw.githubusercontent.com/z7ev3n/iotd/master/app/inspector/logo.png",
+  "enabled": true,
+  "reqirements": {
+    "packages": ["tcpdump"],
+    "pip": ["scapy"]
+  }
+}

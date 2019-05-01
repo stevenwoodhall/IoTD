@@ -1,0 +1,14 @@
+[Unit]
+Description = IOTDdns
+After = network.target iotd-django.service
+
+[Service]
+Type=idle
+User = root
+Group = root
+WorkingDirectory = /opt/iotd/services/iotd-dns
+ExecStartPre=/bin/sleep 30
+ExecStart=/usr/bin/python3 iotd-dns.py
+
+[Install]
+WantedBy = multi-user.target

@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.css" integrity="sha256-BbA16MRVnPLkcJWY/l5MsqhyOIQr7OpgUAkYkKVvYco=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'css/style.min.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'css/tables.min.css' %}" type="text/css">
+  {% if page_title %}
+  <title>{{ page_title }} | IoT Defender</title>
+  {% else %}
+  <title>IoT Defender</title>
+  {% endif %}
+  <link rel="shortcut icon" type="image/png" href="{% static 'img/icon.png' %}" />
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container"> <a class="navbar-brand" href="{% url 'index' %}">
+        <b>IoTD</b>
+      </a> <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar11">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar11">
+        <ul class="navbar-nav mr-auto">
+          {% if user.is_authenticated %}
+          <li class="nav-item"> <a class="nav-link" href="{% url 'apps' %}">Apps</a> </li>
+          <li class="nav-item"> <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a> </li>
+          <li class="nav-item"> <a class="nav-link" href="{% url 'devices' %}">Devices</a> </li>
+          {% endif %}
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
+          <li class="nav-item"> <a class="nav-link" href="{% url 'settings' %}">Settings</a> </li>
+          <li class="nav-item"> <a class="nav-link" href="https://github.com/z7ev3n/IoTD/wiki" target="_blank">Help</a> </li>
+          {% endif %}
+        </ul>
+        {% if user.is_authenticated %}
+        <div class="dropdown">
+          <button class="btn btn-primary navbar-btn ml-md-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-sign-out-alt"></i></button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+            <a class="dropdown-item" href="{% url 'restart-iotd' %}">Restart IoTD</a>
+            <a class="dropdown-item" href="{% url 'restart-device' %}">Restart Device</a>
+            <a class="dropdown-item" href="{% url 'shutdown-device' %}">Shutdown Device</a>
+          </div>
+        </div>
+        {% else %}
+        <a href="{% url 'login'%}?next={{request.path}}" class="btn btn-primary navbar-btn ml-md-2">Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  {% block content %}{% endblock %}
+  <div class="py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center d-md-flex align-items-center"> <a href="{% url 'dashboard' %}"><img src="/static/img/icon.png" height="32px"></a>
+          <div class="nav mx-md-auto d-flex justify-content-center">
+            <p class="mt-2 mb-0">Steven Woodhall - CSM Final Year Project</p>
+          </div>
+          <div class="row">
+            <div class="col-md-12 d-flex align-items-center justify-content-md-between justify-content-center my-2"> <a href="https://github.com/z7ev3n/IoTD" target="_blank">
+                <i class="d-block fa fa-code fa-2x mb-2 text-muted"></i>
+              </a> </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha256-CjSoeELFOcH0/uxWu6mC/Vlrc1AARqbm/jiiImDGV3s=" crossorigin="anonymous"></script>
+  <script src="{% static 'js/iotd.min.js' %}" type="text/javascript"></script>
+  {% block extra %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,112 @@
+{% extends "base_generic.html" %}
+
+{% load humanize %}
+
+{% block content %}
+
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      {% if banner %}
+      <div class="col-md-12">
+        <div class="alert alert-{{ banner.type }}" role="alert">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <h4 class="alert-heading">{{ banner.title }}</h4>
+          <p class="mb-0">{{ banner.msg }}</p>
+        </div>
+      </div>
+      {% endif %}
+      <div class="col-md-12">
+        <h1 class="">Packer Inspector: Summary</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p class="text-left">This module uses tcpdump to record packet captures of your IoT devices.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" title="Recent packet captures." data-toggle="tooltip" data-placement="top">
+        <h3 class="">Custom Packet Captures</h3>
+        <form class="form-inline" action="#" method="post">
+          {% csrf_token %}
+          <div class="form-group mx-sm-2 mb-2">
+            <select id="filterPcap" class="form-control" name="filterPcap">
+              <option value="" selected="" disabled="">Select a Packet Capture</option>
+              {% for pcap in packet_captures %}
+                <option value="{{ pcap.pk }}">{{ pcap.dt_start }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group mx-sm-2 mb-2">
+            <select id="filterDevice" class="form-control" name="filterDevice">
+              <option value="" selected="" disabled="">Choose an IoT Device</option>
+              {% for device in devices %}
+                  <option value="{{ device.mac }}">{{ device.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group mx-sm-2 mb-2">
+            <select id="filter" class="form-control" name="filter">
+              <option value="" disabled="">Select a Filter</option>
+              <option value="" selected="">Show only traffic from this device</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary mx-sm-2 mb-2"><i class="fa fa-download"></i> Download</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" title="Recent packet captures." data-toggle="tooltip" data-placement="top">
+        <h3 class="">Recent Packet Captures</h3>
+        {% if packet_captures %}
+        <div class="table-container">
+          <table class="table">
+            <thead class="thead-default">
+              <tr>
+                <th scope="col">Captured</th>
+                <th scope="col">Started</th>
+                <th scope="col">Finished</th>
+                <th scope="col">Size</th>
+                <th scope="col">Download</th>
+              </tr>
+            </thead>
+            {% if packet_captures %}
+            <tbody>
+              {% for pcap in packet_captures %}
+              <tr>
+                <td>{{ pcap.dt_start|naturaltime }}</td>
+                <td>{{ pcap.dt_start }}</td>
+                <td>{{ pcap.dt_end }}</td>
+                <td>{{ pcap.file_size|filesizeformat }}</td>
+                <th scope="row"><a class="btn btn-primary" href="/pcap/{{ pcap.pk }}" target="_blank" role="button" title="Download {{ pcap.filename }}"><i class="fa fa-download"></i> Download</a></th>
+              </tr>
+              {% endfor %}
+            </tbody>
+            {% endif %}
+          </table>
+        </div>
+        {% else %}
+        <div class="jumbotron">
+          <h5 class="text-center">Packet captures will appear here!</h5>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra %}
+
+{% endblock %}

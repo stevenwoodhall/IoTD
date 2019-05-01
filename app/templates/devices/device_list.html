@@ -1,0 +1,70 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn btn-info float-right" title="View details on adding a new IoT device." data-toggle="modal" data-target="#newDevice"><i class="fa fa-plus"></i> Add New Device</button>
+        <h1 class="">IoT Devices</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p class="text-left">List of connected IoT Devices</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="py-0 text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      {% if object_list %}
+      {% for dev in object_list %}
+      <div class="col-lg-3 col-6 p-4" style=""> <i class="d-block fa fa-{{ dev.icon }} fa-3x mb-2 text-muted"></i>
+        <small title="IP Address">{{ dev.ipv4 }}</small>
+        <p class="lead">{{ dev.title }}</p> <a class="btn btn-primary" href="/device/{{ dev.pk }}">Manage</a>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="col-lg-3 col-6 p-4" style="">
+        <p>No devices.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="newDevice">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Adding a new device</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p>Connect your new IoT device to the <code>{{ wifi_ssid|safe }}</code> Wi-Fi network and when promoted enter the password <code>{{ wifi_password|safe }}</code></p>
+        {% if wifi_config %}
+        {% load qr_code %}
+        <p>If supported you can also connect using the below QR code.</p>
+        <center>{% qr_from_text wifi_config size="M" %}</center>
+        <p>Once connected, the device will appear in the <a href="{% url 'devices' %}">Manage Devices</a> section of IoTD.</p>
+        {% endif %}
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

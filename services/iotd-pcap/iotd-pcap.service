@@ -1,0 +1,23 @@
+[Unit]
+Description = IoTDpcap
+After = network.target
+
+[Service]
+Type=simple
+
+# Location
+Environment="PCAP_DIR=/var/log/iotd-pcaps"
+# PCAP Naming
+Environment="FILE_NAME=%%d-%%m-%%Y_%%H:%%M"
+# Seconds between captures
+Environment="ROTATE_SECONDS=3600"
+# Max file count
+Environment="FILECOUNT=24"
+
+ExecStartPre = /bin/mkdir -p ${PCAP_DIR}
+ExecStartPre = /bin/chown -R pi:pi ${PCAP_DIR}
+ExecStart=/usr/sbin/tcpdump -i wlan0 -G ${ROTATE_SECONDS} -W ${FILECOUNT} -K -w '${PCAP_DIR}/${FILE_NAME}.pcap' -z '/opt/iotd/services/iotd-pcap/rotate.sh'
+ExecStop=/bin/kill -s QUIT $MAINPID
+
+[Install]
+WantedBy=multi-user.target

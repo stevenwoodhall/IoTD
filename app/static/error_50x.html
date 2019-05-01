@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+  <title>IoT Defender</title>
+  <link rel="shortcut icon" type="image/png" href="/static/img/icon.png">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container"> <a class="navbar-brand" href="/">
+        <b>IoTD</b>
+      </a> <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar11">
+        <i class="fas fa-bars"></i>
+      </button>
+
+    </div>
+  </nav>
+
+  <div class="py-5 text-white" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, .75), rgba(0, 0, 0, .75)), url(/static/img/networking.jpg);  background-position: center center, center center;  background-size: cover, cover;  background-repeat: repeat, repeat;">
+    <div class="container">
+      <div class="row">
+
+        <div class="p-5 col-lg-12 d-flex flex-column justify-content-center">
+          <h3 class="display-4 mb-3">Error</h3>
+          <p class="lead mb-0">IoTD is restarting, this page will refresh when it's ready.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center d-md-flex align-items-center"> <a href="/dashboard/"><img src="/static/img/icon.png" height="32px"></a>
+          <div class="nav mx-md-auto d-flex justify-content-center">
+            <p class="mt-2 mb-0">Steven Woodhall - CSM Final Year Project</p>
+          </div>
+          <div class="row">
+            <div class="col-md-12 d-flex align-items-center justify-content-md-between justify-content-center my-2"> <a href="https://github.com/z7ev3n/iotd">
+                <i class="d-block fa fa-code fa-2x mb-2 text-muted"></i>
+              </a> </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function() {
+      // Check if back online
+      window.setInterval(function() {
+        console.log('Refreshing page');
+        location.reload();
+      }, 5000);
+    });
+  </script>
+
+
+
+</body>
+
+</html>

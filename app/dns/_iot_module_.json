@@ -1,0 +1,13 @@
+{
+  "title": "DNS Detective",
+  "author": "Steven Woodhall",
+  "desc": "Log and block DNS requests made by devices.",
+  "repo": "https://github.com/z7ev3n/IoTD",
+  "manage_url": "/dns",
+  "icon": "https://raw.githubusercontent.com/z7ev3n/iotd/master/app/dns/logo.png",
+  "enabled": true,
+  "reqirements": {
+    "packages": ["dnsmasq"],
+    "pip": ["django-chartjs", "django_tables2", "validators"]
+  }
+}

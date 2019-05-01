@@ -1,0 +1,135 @@
+{% extends "base_generic.html" %}
+
+{% load humanize %}
+
+{% block content %}
+
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      {% if banner %}
+      <div class="col-md-12">
+        <div class="alert alert-{{ banner.type }}" role="alert">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <h4 class="alert-heading">{{ banner.title }}</h4>
+          <p class="mb-0">{{ banner.msg }}</p>
+        </div>
+      </div>
+      {% endif %}
+      <div class="col-md-12">
+        <h1 class="">DNS: Summary</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p class="text-left">The DNS module has a DNS server running on port 53, devices use the server to convert domains to IP addresses.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" title="Graph showing number of requests over the past 30 days." data-toggle="tooltip" data-placement="top">
+        <h3>Number Of Requests Per Day</h3>
+        <canvas id="dnsChart" style="width: 100% !important;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 text-left">
+        <h3>Block Domains</h3>
+        <p>A number of bad domains are already blocked using <a href="https://github.com/notracking/hosts-blocklists">hosts-blacklists</a> and you can use the form block additional domains or click the red block buttons below.</p>
+      </div>
+      <div class="col-md-6 text-left">
+        <br>
+        <br>
+        <form class="form-inline" action="#" method="get">
+          <div class="form-group mx-sm-3 mb-2">
+            <input type="text" class="form-control" name="block-domain" placeholder="e.g. example.com" size="40">
+          </div>
+          <button type="submit" class="btn btn-danger mb-2">Block</button>
+        </form>
+        <form class="form-inline" action="#" method="get">
+          <div class="form-group mx-sm-3 mb-2">
+            <input type="text" class="form-control" name="unblock-domain" placeholder="e.g. acme.corp" size="40">
+          </div>
+          <button type="submit" class="btn btn-warning mb-2">Unblock</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-3">
+  <div class="container">
+    <div class="row">
+      {% if dns_requests %}
+      <div class="col-md-6" title="DNS queries recently made by all devices." data-toggle="tooltip" data-placement="top">
+        <h3 class="">Recent DNS Requests</h3>
+        {% load django_tables2 %}
+        {% render_table dns_requests %}
+      </div>
+      {% endif %}
+      <div class="col-md-6" title="The most frequently queried domains." data-toggle="tooltip" data-placement="top">
+        <h3 class="">Top DNS Requests</h3>
+        <div class="table-container">
+          <table class="table">
+            <thead class="thead-default">
+              <tr>
+                <th scope="col">Domain</th>
+                <th scope="col">Count</th>
+              </tr>
+            </thead>
+            {% if top_requests %}
+            <tbody>
+              {% for dev in top_requests %}
+              <tr>
+                <td>{{ dev.domain }} <a href="?block-domain={{ dev.domain }}" class="badge badge-danger" alt="Prevent IoT devices connecting to this domain.">Block</a></td>
+                <th scope="row">{{ dev.total }}</th>
+              </tr>
+              {% endfor %}
+            </tbody>
+            {% endif %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+  {% block extra %}
+  {% load static %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+  <script>
+    var endpoint = '/api/dns-chart-data'
+    $.ajax({
+      method: "GET",
+      url: endpoint,
+      success: function(data) {
+        var ctx = document.getElementById("dnsChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: data.labels,
+            datasets: [{
+              label: 'DNS requests',
+              data: data.data,
+              backgroundColor: 'rgb(18,187,173, 0.1)'
+            }]
+          },
+        });
+      },
+      error: function(error_data) {
+        console.log(error_data)
+      }
+    })
+  </script>
+  {% endblock %}
